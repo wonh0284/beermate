@@ -3,13 +3,8 @@
  */
 package com.beermate.config;
 
-import java.net.URISyntaxException;
-import java.sql.Connection;
-import java.sql.SQLException;
-
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Configuration;
-
-import com.heroku.sdk.jdbc.DatabaseUrl;
 
 /**
  * @author wonho
@@ -19,12 +14,18 @@ import com.heroku.sdk.jdbc.DatabaseUrl;
 public class DatabaseConfig {
 
 	/**
+	 * 
 	 * @return
-	 * @throws SQLException
-	 * @throws URISyntaxException
 	 */
-	public static Connection getConnection() throws SQLException, URISyntaxException {
-		return DatabaseUrl.extract().getConnection();
-		//return DataSourceBuilder.create().build();
+	public BasicDataSource dataSource() {
+		
+		BasicDataSource ds = new BasicDataSource();
+		ds.setUrl("");
+		ds.setUsername("");
+		ds.setPassword("");
+		ds.setDriverClassName("");
+		ds.setInitialSize(1);
+		
+		return ds;
 	}
 }

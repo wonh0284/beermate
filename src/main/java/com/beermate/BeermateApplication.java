@@ -1,11 +1,12 @@
 package com.beermate;
 
-import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.sql.DataSource;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,13 +27,15 @@ public class BeermateApplication {
 class HomeRestController {
 	
 	@RequestMapping("/home")
-	public Object home() throws SQLException, URISyntaxException {
+	public Object home() throws SQLException {
 		
 		Connection conn = null;
+		DataSource ds = new DatabaseConfig().dataSource();
+		
 		ArrayList<String> output = new ArrayList<String>();
 		
 		try {
-			conn = DatabaseConfig.getConnection();
+			conn = ds.getConnection();
 			
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)");
