@@ -3,10 +3,21 @@
  */
 package com.beermate.web;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.beermate.config.DatabaseConfig;
+import com.beermate.dao.JdbcDao;
 
 /**
  * @author wlee
@@ -15,8 +26,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController {
 
-	/*@RequestMapping("/home")
-	public Object home() throws SQLException {
+	@Autowired
+	private JdbcDao jdbcDao;
+	
+	@RequestMapping("/home")
+	public String home() throws SQLException {
+		return "home";
+	}
+	
+	@RequestMapping("/db")
+	@ResponseBody
+	public Object db() throws SQLException {
+		return this.jdbcDao.getTicks();
+	}
+	
+	@RequestMapping("/db2")
+	@ResponseBody
+	public Object db2() throws SQLException {
 		
 		Connection conn = null;
 		DataSource ds = new DatabaseConfig().dataSource();
@@ -42,10 +68,5 @@ public class HomeController {
 		}
 		
 		return output;
-	}
-	*/
-	@RequestMapping("/home")
-	public String home() throws SQLException {
-		return "home";
 	}
 }
