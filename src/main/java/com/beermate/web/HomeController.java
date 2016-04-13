@@ -3,11 +3,13 @@
  */
 package com.beermate.web;
 
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -37,12 +39,14 @@ public class HomeController {
 	@RequestMapping("/db")
 	@ResponseBody
 	public Object db() throws SQLException {
-		return this.jdbcDao.getTicks();
+		
+		List<String> stringList  = this.jdbcDao.getTicks();
+		return stringList;
 	}
 	
 	@RequestMapping("/db2")
 	@ResponseBody
-	public Object db2() throws SQLException {
+	public Object db2() throws SQLException, URISyntaxException {
 		
 		Connection conn = null;
 		DataSource ds = new DatabaseConfig().dataSource();

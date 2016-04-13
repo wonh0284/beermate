@@ -3,7 +3,11 @@
  */
 package com.beermate.config;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -12,22 +16,29 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class DatabaseConfig {
-
+	
 	/**
 	 * 
 	 * @return
+	 * @throws URISyntaxException 
 	 */
-	public BasicDataSource dataSource() {
+	@Bean
+	public BasicDataSource dataSource() throws URISyntaxException {
+		
+		URI dbUri = new URI(System.getenv("DATABASE_URL"));
 
-		BasicDataSource ds = new BasicDataSource();
-		ds.setUrl("jdbc:postgresql://ec2-54-243-243-89.compute-1.amazonaws.com:5432/dbaap0n80c9lji");
-		ds.setUsername("udptwequdoardc");
-		ds.setPassword("lGDwKQBxBR7vd3w00Vdj7X-XEs");
-		ds.setDriverClassName("org.postgresql.Driver");
-		ds.addConnectionProperty("ssl", "true");
-		ds.addConnectionProperty("sslfactory", "org.postgresql.ssl.NonValidatingFactory");
-		ds.setInitialSize(1);
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
 
-		return ds;
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+        basicDataSource.setDriverClassName("org.postgresql.Driver");
+        basicDataSource.addConnectionProperty("ssl", "true");
+        basicDataSource.addConnectionProperty("sslfactory", "org.postgresql.ssl.NonValidatingFactory");
+
+        return basicDataSource;
 	}
 }
